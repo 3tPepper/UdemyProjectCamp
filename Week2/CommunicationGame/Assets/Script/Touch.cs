@@ -1,0 +1,69 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Touch : MonoBehaviour
+{
+
+    public AudioClip voice1;
+    public AudioClip voice2;
+    public Animator animator;
+    public AudioSource univoice;
+
+    //모션 스테이트의 id 얻기
+    private int motionIdol = Animator.StringToHash("Base Layer.Idol");
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        univoice = GetComponent<AudioSource>();
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        animator.SetBool("Touch", false);
+        animator.SetBool("TouchHead", false);
+        animator.SetBool("Face_Happy", false);
+        animator.SetBool("Face_Angry", false);
+
+        //재생 중인 동작 == 대기 동작 검사
+        if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == motionIdol)
+        {
+            animator.SetBool("Motion_Idle", true);
+        }
+        else
+        {
+            animator.SetBool("Motion_Idle", false);
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if(Physics.Raycast(ray, out hit, 100))
+            {
+                GameObject hitObj = hit.collider.gameObject;    //hitObj = ray가 부딪힌 오브젝트
+                if(hitObj.tag == "Head")
+                {
+                    animator.SetBool("TouchHead", true);
+                    animator.SetBool("Face_Happy", true);
+                    animator.SetBool("Face_Angry", false);
+
+                    univoice.clip = voice1;
+                    univoice.Play();
+                }
+                else if(hitObj.tag == "Body")
+                {
+                    animator.SetBool("Touch", true);
+                    animator.SetBool("Face_Happy", false);
+                    animator.SetBool("Face_Angry", true);
+                    univoice.clip = voice2;
+                    univoice.Play();
+                }
+                Debug.Log("hit!");
+
+            }
+        }
+    }
+}
