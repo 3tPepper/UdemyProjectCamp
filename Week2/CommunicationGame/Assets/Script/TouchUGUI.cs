@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Touch : MonoBehaviour
+public class TouchUGUI : MonoBehaviour
 {
 
     public AudioClip voice1;
@@ -46,7 +46,7 @@ public class Touch : MonoBehaviour
                 GameObject hitObj = hit.collider.gameObject;    //hitObj = ray°¡ ºÎµúÈù ¿ÀºêÁ§Æ®
                 if(hitObj.tag == "Head")
                 {
-                    MsgDisplay.ShowMassage("¾È³ç!\n¿À´Ãµµ ÈûÂ÷°Ô ½ÃÀÛÇØº¸ÀÚ~");
+                    MsgDispUGUI.ShowMassage("¾È³ç!\n¿À´Ãµµ ÈûÂ÷°Ô ½ÃÀÛÇØº¸ÀÚ~");
 
                     animator.SetBool("TouchHead", true);
                     animator.SetBool("Face_Happy", true);
@@ -57,7 +57,7 @@ public class Touch : MonoBehaviour
                 }
                 else if(hitObj.tag == "Body")
                 {
-                    MsgDisplay.ShowMassage("²¥¾Ç!");
+                    MsgDispUGUI.ShowMassage("²¥¾Ç!");
 
                     animator.SetBool("Touch", true);
                     animator.SetBool("Face_Happy", false);
@@ -65,7 +65,12 @@ public class Touch : MonoBehaviour
                     univoice.clip = voice2;
                     univoice.Play();
                 }
+                else if (hitObj.tag == "Arm")
+                {
+                    System.DateTime now = System.DateTime.Now;
 
+                    MsgDispUGUI.ShowMassage(now.Date.ToString());
+                }
                 Debug.Log("hit!");
 
             }
